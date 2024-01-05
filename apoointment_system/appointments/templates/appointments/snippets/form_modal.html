@@ -1,0 +1,158 @@
+
+{% block extra_head %}
+<style>
+    /* The Modal (background) */
+.appointmentModal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content/Box */
+  .modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: 0 auto; /* 0 from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+  }
+  
+  /* The Close Button */
+  .close {
+    color: #aaa;
+    position: absolute;
+    right: .5rem; top: 0rem;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: #bc2626;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+.appointment_form{
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.form_group{
+    width: 100%;
+    margin: 0 auto;
+    max-width: 500px;
+    display: flex;
+    justify-content: space-between;
+}
+.form_group input, .form_group select, .form_group textarea{
+    padding: .5rem 1rem;
+    margin-bottom: 1rem;
+    width: 100%;
+    min-width: 150px; max-width: 300px;
+    outline: none;
+    border: 1px solid rgb(204, 204, 204);
+    max-height: 100px;
+}
+.disabledInput {
+    pointer-events: none;
+}
+
+.appointment_form input[type=submit]{
+    float: right;
+}
+</style>
+{% endblock %}
+
+{% if form != none  %}
+<!-- Modal -->
+<div id="appointmentModal" class="appointmentModal">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <form class="appointment_form" method="post" action="">
+            {{form.errors}}
+            {%csrf_token%}
+            <h2>Book an appointment</h2>
+            <br/>
+            {% for field in form %}
+            <div class="form_group">
+                {{field.label}}
+                {{field}}
+            </div>
+            {% endfor %}
+            <button type="submit" id="form-submit-btn" class="btn btn-warning d-inline">
+                Book!
+            </button>
+            <a href="#" class="btn btn-danger " role="button">Remove</a>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+
+{% block extra_js %}
+<script type="application/javascript">
+    const modal = document.getElementById("appointmentModal");
+    const closeBtn = document.getElementsByClassName("close")[0];
+    const timeInput = document.getElementById("id_time");
+    const dateInput = document.getElementById("id_date");
+    const serviceInput = document.getElementById("id_service");
+    const lengthInput = document.getElementById("id_length");
+    const notesInput = document.getElementById("id_notes");
+    const submitBtn = document.getElementById("form-submit-btn");
+    const form = document.getElementById("apointmentForm");
+
+    function fetchAppointmentData(appointment_id){
+        getUrl = window.location;
+        var path = "/appointment/" + appointment_id ;
+        var url = getUrl.protocol + '//' + getUrl.host + path;
+        fetch(url,{
+            headers:{
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        }).then(response => {
+            return response.json()
+        })
+        .then(data =>{
+            serviceInput.value = data.service
+            lengthInput.value = data.length
+            console.log(lengthInput.value)
+            notesInput.value = data.notes
+        })
+    }
+    
+    function openAppointmentModal(e){
+        appointment_id = e.getAttribute('data-id');
+        stamp = e.getAttribute('data-stamp');
+        date = e.getAttribute('data-date');
+        if (appointment_id){
+            submitBtn.innerHTML = "save"
+            const data = await fetchAppointmentData(appointment_id)
+        }else{submitBtn.innerHTML = "Book!"}
+        timeInput.value = stamp.substring(0, stamp.length - 2);
+        if (date) dateInput.value = date
+        modal.style.display = 'block';
+    }
+
+
+
+    closeBtn.onclick = () =>{
+        modal.style.display = "none";
+    }
+
+    window.onclick = (event) =>{
+        if (event.target != modal) return;
+        modal.style.display = "none";
+    }
+</script>
+{% endblock %}

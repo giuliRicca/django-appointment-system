@@ -1,0 +1,97 @@
+*{
+    padding: 0;
+    margin: 0;
+    font-family: 'IBM Plex Sans', sans-serif;
+    box-sizing: border-box;
+}
+h1{
+    font-weight: 400;
+    font-size: 3rem;
+}
+
+a{
+    color: #fff;
+    text-decoration: none;
+}
+textarea{
+    resize: none;
+}
+
+header{
+    background-color: #161616;
+}
+header ul{
+    padding: 1rem;
+}
+header ul li, header ul li h3 {
+    display: inline;
+    color: #fff;
+}
+header ul li h3 a{
+    font-weight: 300;
+}
+
+header ul li.right{
+    float: right;
+    margin: 0 .7rem;
+}
+
+main{
+    position: relative;
+}
+
+.sidebar{
+    width: 60px;
+    height: 100%;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    padding-top: 1.3rem;
+}
+
+.sidebar ul li{
+    margin-bottom: 1.3rem;
+    list-style: none;
+}
+.sidebar ul li a{
+    color: #161616;  
+}
+.sidebar ul li a i:hover{
+    color: #494949;
+}
+
+.content{
+    padding-top: 1rem;
+    /* Firefox */
+    margin-left: -moz-calc(60px + 1rem);
+    /* WebKit */
+    margin-left: -webkit-calc(60px + 1rem);
+    /* Opera */
+    margin-left: -o-calc(60px + 1rem);
+    /* Standard */
+    margin-left: calc(60px + 1rem);
+}
+
+/* Helper classes */
+.main-button{
+    padding: .5rem 1.2rem;
+    text-transform: capitalize;
+    color: #161616;
+    background-color: #FDD13A;
+    border-radius: 10px;
+    border:none;
+    cursor: pointer;
+}
+.main-button:hover, .main-button:focus{
+    background-color: #f0c535;
+}
+.bg-light{
+    background-color: #F4F4F4;
+}
+
+.grid{
+    display: grid;
+    grid-gap: 1rem;
+    padding-right: 1rem;
+    color: #161616;
+}

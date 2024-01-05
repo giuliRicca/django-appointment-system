@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load tz %}
+{% block title %}
+{{owner}}
+{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/appointments/home.css' %}">
+{% endblock %}
+
+
+{% block body %}
+
+{% localtime on %}
+{{time_table|safe}}
+{% endlocaltime %}
+
+{% include 'appointments/snippets/form_modal.html' %}
+
+{% endblock %}

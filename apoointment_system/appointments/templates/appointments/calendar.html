@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Calendar {% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/appointments/calendar.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="grid">
+    <h1>Calendar</h1>
+    <div class="controls">
+        <a href="{% url 'calendar' %}?week={{week_offset|add:-1}}"><</a>
+        <a href="{% url 'calendar' %}?week={{week_offset|add:1}}">></a>
+    </div>
+    {{calendar|safe}}
+</div> 
+
+{% include 'appointments/snippets/form_modal.html' %}
+{% endblock %}
+

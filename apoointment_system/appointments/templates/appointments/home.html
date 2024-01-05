@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load tz %}
+
+{% block title %} Home {% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/appointments/home.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="grid">
+    <h1>Dashboard</h1>
+    <div class="box bg-light">
+        <h3>Today</h3>
+        <button id="copyBtn">Copy link</button>
+    </div>
+
+    <div class="box">
+        <ul>
+            {% if today %}
+            {% for appointment in today %}
+                <li class="appointment {{appointment.get_state_display}}">
+                    <h4>{{ appointment.get_time }}</h4>
+                    <div class="info">
+                        <p>{{appointment.service}} - {{appointment.length}}min</p>
+                        <small>{{appointment.notes}}</small>
+                    </div>
+                    <a class="stateBtn" href="{% url 'update_appointment' id=appointment.id %}">{{appointment.get_state_display}}</a>
+                </li>   
+            {% endfor %}
+            {% else %}
+                <h4>You have no appointments for today.</h4>
+            {% endif %}
+        </ul>
+
+        <div>
+            {% localtime on %}
+            {{time_table|safe}}
+            {% endlocaltime %}
+            <div class="commingUp">
+                <h3>Comming up next</h3>
+                <ul>
+                    {% for appointment in comming_up %}
+                    <li>
+                        <p>{{appointment}}</p>
+                        <a class="stateBtn {{appointment.get_state_display}}" href="{% url 'update_appointment' id=appointment.id %}">{{appointment.get_state_display}}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    {% include 'appointments/snippets/form_modal.html' %}
+    
+{% endblock %}
+
+
+{% block extra_js %}
+<script type="application/javascript">
+    const state = document.getElementById("stateSelect");
+    const copyBtn = document.getElementById("copyBtn");
+    getUrl = window.location;
+    var path = "{% url 'user_calendar' username=request.user %}";
+    var url = getUrl.protocol + '//' + getUrl.host + path;
+
+    copyBtn.onclick = (e) => {
+        navigator.clipboard.writeText(url)
+        .then(() =>{
+            alert('copied to clipboard');
+            copyBtn.innerHTML = "Copied!";
+            copyBtn.style.color = "#2eac47";
+        })
+        .catch(()=>{
+            alert("Something went wrong :(")
+        })
+    }
+</script>
+{% endblock %}

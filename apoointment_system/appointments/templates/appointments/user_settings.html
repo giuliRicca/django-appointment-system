@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} settings {% endblock %}
+
+{% block body %}
+<h2>Settings</h2>
+
+<ul class="list-group">
+    {% if services %}
+    <!--  -->
+    {% for service in services %}
+    <li class="list-group-item">
+       {{service}}
+    </li>
+    {% endfor %}
+    <!--  -->
+    {% endif %}
+</ul>
+
+{% endblock %}
